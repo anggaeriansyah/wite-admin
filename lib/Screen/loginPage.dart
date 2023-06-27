@@ -43,17 +43,25 @@ class _LoginPageState extends State<LoginPage> {
               width: MediaQuery.of(context).size.width * 0.4,
             ),
             const SizedBox(
-              height: 40,
+              height: 30,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Center(
                 child: TextFormField(
                   controller: emailController,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                     labelText: "Email",
+                    floatingLabelStyle:
+                        TextStyle(color: Theme.of(context).primaryColor),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
+                        borderRadius: BorderRadius.circular(20)),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide:
+                          BorderSide(color: Theme.of(context).primaryColor),
+                    ),
                   ),
                 ),
               ),
@@ -67,14 +75,24 @@ class _LoginPageState extends State<LoginPage> {
                 child: TextFormField(
                   obscureText: _obscureText,
                   controller: passwordController,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                     labelText: "Password",
+                    floatingLabelStyle:
+                        TextStyle(color: Theme.of(context).primaryColor),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
+                        borderRadius: BorderRadius.circular(20)),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide:
+                          BorderSide(color: Theme.of(context).primaryColor),
+                    ),
                     suffixIcon: IconButton(
-                      icon: Icon(_obscureText
-                          ? Icons.visibility
-                          : Icons.visibility_off),
+                      icon: Icon(
+                          _obscureText
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Theme.of(context).primaryColor),
                       onPressed: () {
                         setState(() {
                           _obscureText = !_obscureText;
@@ -90,6 +108,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                   primary: Theme.of(context).primaryColor),
               onPressed: () {
                 // try {

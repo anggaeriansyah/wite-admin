@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:wite_dashboard/Bloc/auth_bloc.dart';
-import 'package:wite_dashboard/Screen/Dashboard.dart';
+import 'package:wite_dashboard/Screen/dashboard.dart';
 import 'package:wite_dashboard/Screen/loginPage.dart';
 import 'package:wite_dashboard/firebase_options.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

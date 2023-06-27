@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wite_dashboard/Screen/Dashboard.dart';
+import 'package:wite_dashboard/Screen/dashboard.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 import 'dart:collection';
@@ -666,6 +666,18 @@ class _TambahScreenState extends State<TambahScreen> {
                             selectedOptionDesa = newValue!;
                           });
                         },
+                        // items: Desa.values
+                        //     .map<DropdownMenuItem<String>>((Desa value) {
+                        //   String label = value.toString().split('.').last;
+                        //   String spacedLabel = label
+                        //       .replaceAll(RegExp('([A-Z])'), ' \$1')
+                        //       .trim();
+                        //   return DropdownMenuItem<String>(
+                        //     value: value.toString(),
+                        //     child: Text(spacedLabel),
+                        //   );
+                        // }).toList(),
+
                         items: <String>[
                           'Tapos I',
                           'Tapos II',

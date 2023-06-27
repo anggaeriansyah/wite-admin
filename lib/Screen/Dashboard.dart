@@ -86,6 +86,11 @@ class _DashboardState extends State<Dashboard> {
 
     return Scaffold(
         appBar: AppBar(
+          leading: GestureDetector(
+              onTap: () {
+                showChangePasswordDialog(context);
+              },
+              child: const Icon(Icons.key)),
           centerTitle: true,
           title: const Text(
             "Kelola Wisata",
@@ -671,6 +676,225 @@ Future<void> _dialogBuilder(BuildContext context, data) {
           ),
         ],
       );
+    },
+  );
+}
+
+showChangePasswordDialog(BuildContext context) {
+  String currentPassword = '';
+  String newPassword = '';
+  String confirmPassword = '';
+  String pesanKesalahan = '';
+  bool isLoading = false;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          title: const Center(child: Text('Ganti Password')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                obscureText: true,
+                onChanged: (value) {
+                  currentPassword = value;
+                },
+                decoration: InputDecoration(
+                  labelText: 'Password Saat Ini',
+                  border: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                obscureText: true,
+                onChanged: (value) {
+                  newPassword = value;
+                },
+                decoration: InputDecoration(
+                  labelText: 'Password Baru',
+                  border: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                obscureText: true,
+                onChanged: (value) {
+                  confirmPassword = value;
+                },
+                decoration: InputDecoration(
+                  labelText: 'Konfirmasi Password Baru',
+                  border: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              isLoading
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).primaryColor),
+                          )))
+                  : pesanKesalahan == ''
+                      ? const SizedBox()
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              softWrap: true,
+                              pesanKesalahan,
+                              style: const TextStyle(
+                                  fontSize: 13, color: Colors.red),
+                            ),
+                          ),
+                        ),
+            ],
+          ),
+          actions: [
+            Container(
+              margin: const EdgeInsets.only(bottom: 5),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary:
+                      Theme.of(context).primaryColor, // Warna latar belakang
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                onPressed: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  try {
+                    User? user = FirebaseAuth.instance.currentUser;
+                    if (currentPassword.isEmpty ||
+                        newPassword.isEmpty ||
+                        confirmPassword.isEmpty) {
+                      setState(() {
+                        isLoading = false;
+                        pesanKesalahan = 'Semua field password harus diisi';
+                      });
+                      print('Semua field password harus diisi');
+                      return;
+                    }
+
+                    if (newPassword != confirmPassword) {
+                      setState(() {
+                        isLoading = false;
+                        pesanKesalahan = 'Konfirmasi password tidak cocok';
+                      });
+                      print('Konfirmasi password tidak cocok');
+                      return;
+                    }
+                    if (user != null) {
+                      AuthCredential credential = EmailAuthProvider.credential(
+                        email: user.email!,
+                        password: currentPassword,
+                      );
+
+                      await user.reauthenticateWithCredential(credential);
+                      await user.updatePassword(newPassword);
+                      print('Password berhasil diubah');
+                      setState(() {
+                        isLoading = false;
+                        pesanKesalahan = 'Password berhasil diubah';
+                      });
+                      Navigator.pop(context);
+                    } else {
+                      setState(() {
+                        isLoading = false;
+                        pesanKesalahan = 'Pengguna tidak ditemukan';
+                      });
+                      print('Pengguna tidak ditemukan');
+                    }
+                  } catch (e) {
+                    setState(() {
+                      isLoading = false;
+                      pesanKesalahan =
+                          'Terjadi kesalahan saat mengubah password';
+                    });
+                    String errorMessage =
+                        'Terjadi kesalahan saat mengubah password';
+
+                    if (e is FirebaseAuthException) {
+                      if (e.code == 'wrong-password') {
+                        setState(() {
+                          isLoading = false;
+                          pesanKesalahan = 'Password saat ini salah';
+                        });
+                        errorMessage = 'Password saat ini salah';
+                      } else {
+                        setState(() {
+                          isLoading = false;
+                          pesanKesalahan = '${e.message}';
+                        });
+                        errorMessage = '${e.message}';
+                      }
+                    }
+                    setState(() {
+                      isLoading = false;
+                      pesanKesalahan = '$errorMessage';
+                    });
+                    print(errorMessage);
+                  }
+                },
+                child: const Text('Ubah'),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(right: 15, bottom: 5),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Tutup dialog
+                },
+                style: ElevatedButton.styleFrom(
+                  primary:
+                      Theme.of(context).primaryColor, // Warna latar belakang
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                child: const Text('Batal'),
+              ),
+            ),
+          ],
+        );
+      });
     },
   );
 }

@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wite_dashboard/Screen/Dashboard.dart';
+import 'package:wite_dashboard/Screen/dashboard.dart';
 
 class UpdateScreen extends StatefulWidget {
   // const MyWidget({Key? key}) : super(key: key);
