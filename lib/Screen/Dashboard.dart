@@ -49,11 +49,11 @@ class _DashboardState extends State<Dashboard> {
   //       Future(() => querySnapshot.docs.map((doc) => doc.data()).toList()));
   // }
 
-  void _searchData(value) async {
+  void _searchData(value) {
     final query = value;
     final queryLetters = query.split('');
     if (query == '') {
-      final snapshot = await FirebaseFirestore.instance
+      final snapshot = FirebaseFirestore.instance
           .collection('wisata') // Ganti dengan nama koleksi Firebase Anda
           // .orderBy('nama')
           .snapshots();
@@ -62,7 +62,7 @@ class _DashboardState extends State<Dashboard> {
         _searchResults = snapshot;
       });
     } else {
-      final snapshot = await FirebaseFirestore.instance
+      final snapshot = FirebaseFirestore.instance
           .collection('wisata') // Ganti dengan nama koleksi Firebase Anda
           .orderBy('nama')
           .where('nama',

@@ -10,6 +10,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wite_dashboard/Screen/Dashboard.dart';
 import 'package:get/get.dart';
+import 'dart:async';
+import 'dart:collection';
 
 class TambahScreen extends StatefulWidget {
   // const MyWidget({Key? key}) : super(key: key);
@@ -51,6 +53,94 @@ class _TambahScreenState extends State<TambahScreen> {
   TimeOfDay? _selectedClosingTime;
   TextEditingController _latController = TextEditingController();
   TextEditingController _longController = TextEditingController();
+
+  final Set<Polygon> _polygon = HashSet<Polygon>();
+
+  List<LatLng> points = const [
+    LatLng(-6.715958, 106.730926),
+    LatLng(-6.712839, 106.725821),
+    LatLng(-6.706891, 106.720422),
+    LatLng(-6.704236, 106.715780),
+    LatLng(-6.698845, 106.710584),
+    LatLng(-6.697333, 106.708581),
+    LatLng(-6.694545, 106.706684),
+    LatLng(-6.692586, 106.704864),
+    LatLng(-6.691757, 106.702967),
+    LatLng(-6.688216, 106.701677),
+    LatLng(-6.686736, 106.699764), //curug ciampea
+    LatLng(-6.681963, 106.695988),
+    LatLng(-6.679024, 106.694471),
+    LatLng(-6.671113, 106.698339),
+    LatLng(-6.667270, 106.698946),
+    LatLng(-6.665235, 106.697960),
+    LatLng(-6.664557, 106.696215),
+    LatLng(-6.655365, 106.691967),
+    LatLng(-6.645795, 106.688857),
+    LatLng(-6.633965, 106.687871),
+    LatLng(-6.629219, 106.684740),
+    LatLng(-6.621204, 106.684367),
+    LatLng(-6.618511, 106.687320),
+    LatLng(-6.615679, 106.688260),
+    LatLng(-6.611984, 106.686924),
+    LatLng(-6.609963, 106.687040),
+    LatLng(-6.609155, 106.688202),
+    LatLng(-6.607654, 106.687912),
+    LatLng(-6.603224, 106.689516),
+    LatLng(-6.604090, 106.693191), // turn2
+    LatLng(-6.606627, 106.694437),
+    LatLng(-6.606999, 106.695620),
+    LatLng(-6.606484, 106.697133),
+    LatLng(-6.605202, 106.697391),
+    LatLng(-6.604006, 106.697133),
+    LatLng(-6.604006, 106.699714),
+    LatLng(-6.601272, 106.701520),
+    LatLng(-6.598367, 106.701348),
+    LatLng(-6.594351, 106.704187),
+    LatLng(-6.589822, 106.708315),
+    LatLng(-6.590249, 106.712788),
+    LatLng(-6.594094, 106.712874),
+    LatLng(-6.595291, 106.711326),
+    LatLng(-6.598025, 106.711670),
+    LatLng(-6.598879, 106.710552),
+    LatLng(-6.601614, 106.710810),
+    LatLng(-6.602041, 106.713648),
+    LatLng(-6.603664, 106.715369),
+    LatLng(-6.604861, 106.715541),
+    LatLng(-6.605971, 106.714423),
+    LatLng(-6.608279, 106.713906),
+    LatLng(-6.609646, 106.712186),
+    LatLng(-6.615370, 106.709606),
+    LatLng(-6.618703, 106.713132),
+    LatLng(-6.621864, 106.713046), //
+    LatLng(-6.623915, 106.714681),
+    LatLng(-6.626393, 106.714939),
+    LatLng(-6.628101, 106.716401),
+    LatLng(-6.630152, 106.714939),
+    LatLng(-6.630579, 106.711756),
+    LatLng(-6.634595, 106.711498),
+    LatLng(-6.636902, 106.714078),
+    LatLng(-6.643652, 106.716917),
+    LatLng(-6.647155, 106.719756),
+    LatLng(-6.649974, 106.719670),
+    LatLng(-6.652537, 106.721906),
+    LatLng(-6.652537, 106.721906),
+    LatLng(-6.662277, 106.724314),
+    LatLng(-6.667945, 106.725992),
+    LatLng(-6.670190, 106.726032),
+    LatLng(-6.676116, 106.727022),
+    LatLng(-6.678081, 106.728530),
+    LatLng(-6.680607, 106.729001),
+    LatLng(-6.684163, 106.728624),
+    LatLng(-6.685660, 106.729754),
+    LatLng(-6.688374, 106.729377),
+    LatLng(-6.691929, 106.730320),
+    LatLng(-6.693707, 106.729001),
+    LatLng(-6.696514, 106.729566),
+    LatLng(-6.701379, 106.728059),
+    LatLng(-6.702130, 106.731342),
+    LatLng(-6.705601, 106.733205),
+    LatLng(-6.715349, 106.733612),
+  ];
 
   // Baru
   File? _imageFile;
@@ -1589,12 +1679,13 @@ class _TambahScreenState extends State<TambahScreen> {
                               });
                             },
                             markers: _markers,
+                            polygons: _polygon,
                             initialCameraPosition: CameraPosition(
                               target: _selectedLocation != null
                                   ? _selectedLocation!
                                   : LatLng(-6.6400000,
                                       106.708000), // Koordinat awal peta
-                              zoom: 15, // Tingkat zoom awal
+                              zoom: 12, // Tingkat zoom awal
                             ),
                           ),
                         ),
@@ -1664,6 +1755,16 @@ class _TambahScreenState extends State<TambahScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _polygon.add(
+      Polygon(
+          polygonId: const PolygonId('1'),
+          points: points,
+          // fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
+          fillColor: Colors.white.withOpacity(0.1),
+          geodesic: true,
+          strokeWidth: 1,
+          strokeColor: Theme.of(context).primaryColor.withOpacity(0.8)),
+    );
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
