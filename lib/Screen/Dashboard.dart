@@ -173,6 +173,7 @@ class _DashboardState extends State<Dashboard> {
             if (state is AuthUnauthenticated) {
               // Lakukan logout
               FirebaseAuth.instance.signOut();
+              Navigator.of(context).pop();
             }
           },
           child: GestureDetector(
@@ -892,8 +893,7 @@ showChangePasswordDialog(BuildContext context) {
                   Navigator.pop(context); // Tutup dialog
                 },
                 style: ElevatedButton.styleFrom(
-                  primary:
-                      Theme.of(context).primaryColor, // Warna latar belakang
+                  primary: Colors.grey, // Warna latar belakang
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
