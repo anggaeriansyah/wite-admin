@@ -702,11 +702,14 @@ showChangePasswordDialog(BuildContext context) {
             children: [
               TextField(
                 obscureText: true,
+                cursorColor: Theme.of(context).primaryColor,
                 onChanged: (value) {
                   currentPassword = value;
                 },
                 decoration: InputDecoration(
                   labelText: 'Password Saat Ini',
+                  floatingLabelStyle:
+                      TextStyle(color: Theme.of(context).primaryColor),
                   border: OutlineInputBorder(
                     borderSide:
                         BorderSide(color: Theme.of(context).primaryColor),
@@ -722,11 +725,14 @@ showChangePasswordDialog(BuildContext context) {
               const SizedBox(height: 10),
               TextField(
                 obscureText: true,
+                cursorColor: Theme.of(context).primaryColor,
                 onChanged: (value) {
                   newPassword = value;
                 },
                 decoration: InputDecoration(
                   labelText: 'Password Baru',
+                  floatingLabelStyle:
+                      TextStyle(color: Theme.of(context).primaryColor),
                   border: OutlineInputBorder(
                     borderSide:
                         BorderSide(color: Theme.of(context).primaryColor),
@@ -742,11 +748,14 @@ showChangePasswordDialog(BuildContext context) {
               const SizedBox(height: 10),
               TextField(
                 obscureText: true,
+                cursorColor: Theme.of(context).primaryColor,
                 onChanged: (value) {
                   confirmPassword = value;
                 },
                 decoration: InputDecoration(
                   labelText: 'Konfirmasi Password Baru',
+                  floatingLabelStyle:
+                      TextStyle(color: Theme.of(context).primaryColor),
                   border: OutlineInputBorder(
                     borderSide:
                         BorderSide(color: Theme.of(context).primaryColor),
