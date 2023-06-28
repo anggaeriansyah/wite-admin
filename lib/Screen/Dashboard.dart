@@ -84,99 +84,221 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
 
-    return Scaffold(
-        appBar: AppBar(
-          leading: GestureDetector(
-              onTap: () {
-                showChangePasswordDialog(context);
-              },
-              child: const Icon(Icons.key)),
-          centerTitle: true,
-          title: const Text(
-            "Kelola Wisata",
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Theme.of(context).primaryColor,
-          actions: [
-            InkWell(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      contentPadding:
-                          const EdgeInsets.fromLTRB(24.0, 15, 24.0, 10),
-                      actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20))),
-                      title: const Text('Perhatian!'),
-                      content: const Text(
-                        'Apakah anda yakin ingin Logout?',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      actions: <Widget>[
-                        const Divider(
-                          thickness: 1,
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                textStyle:
-                                    Theme.of(context).textTheme.labelLarge,
-                              ),
-                              child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                  decoration: BoxDecoration(
-                                      color: Theme.of(context).primaryColor,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(10))),
-                                  child: const Text(
-                                    'Logout',
-                                    style: TextStyle(color: Colors.white),
-                                  )),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                FirebaseAuth.instance.signOut();
-                                print("Logout");
-                              },
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                textStyle:
-                                    Theme.of(context).textTheme.labelLarge,
-                              ),
-                              child: const Text('Batal'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Icon(Icons.logout_rounded),
-              ),
-            )
-          ],
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthUnauthenticated) {
+          // Lakukan logout
+          FirebaseAuth.instance.signOut();
+          Navigator.of(context).pop();
+        }
+      },
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: Theme.of(context).primaryColor,
         ),
-        body: BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is AuthUnauthenticated) {
-              // Lakukan logout
-              FirebaseAuth.instance.signOut();
-              Navigator.of(context).pop();
-            }
-          },
-          child: GestureDetector(
+        home: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text(
+              "Kelola Wisata",
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Theme.of(context).primaryColor,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: PopupMenuButton(
+                    icon: Icon(
+                      FontAwesomeIcons.userGear,
+                      color: Colors.white,
+                    ),
+                    elevation: 5,
+                    position: PopupMenuPosition.under,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    itemBuilder: (context) => <PopupMenuEntry>[
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(FontAwesomeIcons.key,
+                                    color: Theme.of(context).primaryColor),
+                                const SizedBox(width: 10),
+                                Text('Ganti Password',
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.w500,
+                                    )),
+                              ],
+                            ),
+                            onTap: () {
+                              showChangePasswordDialog(context);
+                            },
+                          ),
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(FontAwesomeIcons.rightFromBracket,
+                                    color: Theme.of(context).primaryColor),
+                                const SizedBox(width: 10),
+                                Text('Logout',
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.w500,
+                                    )),
+                              ],
+                            ),
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        24.0, 15, 24.0, 10),
+                                    actionsPadding:
+                                        const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))),
+                                    title: const Center(child: Text('Logout?')),
+                                    content: const Text(
+                                      'Apakah anda yakin ingin Logout?',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    actions: <Widget>[
+                                      const Divider(
+                                        thickness: 1,
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  FirebaseAuth.instance
+                                                      .signOut();
+                                                  print("Logout");
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: Colors
+                                                      .red, // Warna latar belakang
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                  ),
+                                                ),
+                                                child: const Text(
+                                                  'Logout',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.pop(
+                                                    context); // Tutup dialog
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Colors
+                                                    .grey, // Warna latar belakang
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                ),
+                                              ),
+                                              child: const Text('Batal'),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ]),
+              )
+
+              // InkWell(
+              //   onTap: () {
+              //     showDialog(
+              //       context: context,
+              //       builder: (BuildContext context) {
+              //         return AlertDialog(
+              //           contentPadding:
+              //               const EdgeInsets.fromLTRB(24.0, 15, 24.0, 10),
+              //           actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              //           shape: const RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.all(Radius.circular(20))),
+              //           title: const Text('Perhatian!'),
+              //           content: const Text(
+              //             'Apakah anda yakin ingin Logout?',
+              //             style: TextStyle(fontSize: 16),
+              //           ),
+              //           actions: <Widget>[
+              //             const Divider(
+              //               thickness: 1,
+              //               height: 5,
+              //             ),
+              //             Row(
+              //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //               children: [
+              //                 TextButton(
+              //                   style: TextButton.styleFrom(
+              //                     textStyle:
+              //                         Theme.of(context).textTheme.labelLarge,
+              //                   ),
+              //                   child: Container(
+              //                       padding: const EdgeInsets.symmetric(
+              //                           horizontal: 20, vertical: 10),
+              //                       decoration: BoxDecoration(
+              //                           color: Theme.of(context).primaryColor,
+              //                           borderRadius: const BorderRadius.all(
+              //                               Radius.circular(10))),
+              //                       child: const Text(
+              //                         'Logout',
+              //                         style: TextStyle(color: Colors.white),
+              //                       )),
+              //                   onPressed: () {
+              //                     Navigator.pop(context);
+              //                     FirebaseAuth.instance.signOut();
+              //                     print("Logout");
+              //                   },
+              //                 ),
+              //                 TextButton(
+              //                   style: TextButton.styleFrom(
+              //                     textStyle:
+              //                         Theme.of(context).textTheme.labelLarge,
+              //                   ),
+              //                   child: const Text('Batal'),
+              //                   onPressed: () {
+              //                     Navigator.of(context).pop();
+              //                   },
+              //                 ),
+              //               ],
+              //             ),
+              //           ],
+              //         );
+              //       },
+              //     );
+              //   },
+              //   child: const Padding(
+              //     padding: EdgeInsets.symmetric(horizontal: 10),
+              //     child: Icon(Icons.logout_rounded),
+              //   ),
+              // )
+            ],
+          ),
+          body: GestureDetector(
             onTap: () {
               authBloc.add(const AuthUserInteraction());
             },
@@ -617,7 +739,9 @@ class _DashboardState extends State<Dashboard> {
               ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -694,212 +818,235 @@ showChangePasswordDialog(BuildContext context) {
       return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
         return AlertDialog(
+          contentPadding: EdgeInsets.fromLTRB(24.0, 20, 24.0, 5),
+          actionsPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
           title: const Center(child: Text('Ganti Password')),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                obscureText: true,
-                cursorColor: Theme.of(context).primaryColor,
-                onChanged: (value) {
-                  currentPassword = value;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Password Saat Ini',
-                  floatingLabelStyle:
-                      TextStyle(color: Theme.of(context).primaryColor),
-                  border: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                obscureText: true,
-                cursorColor: Theme.of(context).primaryColor,
-                onChanged: (value) {
-                  newPassword = value;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Password Baru',
-                  floatingLabelStyle:
-                      TextStyle(color: Theme.of(context).primaryColor),
-                  border: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
-                    borderRadius: BorderRadius.circular(10.0),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  obscureText: true,
+                  cursorColor: Theme.of(context).primaryColor,
+                  onChanged: (value) {
+                    currentPassword = value;
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Password Saat Ini',
+                    floatingLabelStyle:
+                        TextStyle(color: Theme.of(context).primaryColor),
+                    border: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                obscureText: true,
-                cursorColor: Theme.of(context).primaryColor,
-                onChanged: (value) {
-                  confirmPassword = value;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Konfirmasi Password Baru',
-                  floatingLabelStyle:
-                      TextStyle(color: Theme.of(context).primaryColor),
-                  border: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
-                    borderRadius: BorderRadius.circular(10.0),
+                const SizedBox(height: 10),
+                TextField(
+                  obscureText: true,
+                  cursorColor: Theme.of(context).primaryColor,
+                  onChanged: (value) {
+                    newPassword = value;
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Password Baru',
+                    floatingLabelStyle:
+                        TextStyle(color: Theme.of(context).primaryColor),
+                    border: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
                   ),
                 ),
-              ),
-              isLoading
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).primaryColor),
-                          )))
-                  : pesanKesalahan == ''
-                      ? const SizedBox()
-                      : Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              softWrap: true,
-                              pesanKesalahan,
-                              style: const TextStyle(
-                                  fontSize: 13, color: Colors.red),
+                const SizedBox(height: 10),
+                TextField(
+                  obscureText: true,
+                  cursorColor: Theme.of(context).primaryColor,
+                  onChanged: (value) {
+                    confirmPassword = value;
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Konfirmasi Password Baru',
+                    floatingLabelStyle:
+                        TextStyle(color: Theme.of(context).primaryColor),
+                    border: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+                isLoading
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Theme.of(context).primaryColor),
+                            )))
+                    : pesanKesalahan == ''
+                        ? const SizedBox()
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 15),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                softWrap: true,
+                                pesanKesalahan,
+                                style: const TextStyle(
+                                    fontSize: 13, color: Colors.red),
+                              ),
                             ),
                           ),
-                        ),
-            ],
+              ],
+            ),
           ),
           actions: [
-            Container(
-              margin: const EdgeInsets.only(bottom: 5),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary:
-                      Theme.of(context).primaryColor, // Warna latar belakang
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                onPressed: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  try {
-                    User? user = FirebaseAuth.instance.currentUser;
-                    if (currentPassword.isEmpty ||
-                        newPassword.isEmpty ||
-                        confirmPassword.isEmpty) {
-                      setState(() {
-                        isLoading = false;
-                        pesanKesalahan = 'Semua field password harus diisi';
-                      });
-                      print('Semua field password harus diisi');
-                      return;
-                    }
-
-                    if (newPassword != confirmPassword) {
-                      setState(() {
-                        isLoading = false;
-                        pesanKesalahan = 'Konfirmasi password tidak cocok';
-                      });
-                      print('Konfirmasi password tidak cocok');
-                      return;
-                    }
-                    if (user != null) {
-                      AuthCredential credential = EmailAuthProvider.credential(
-                        email: user.email!,
-                        password: currentPassword,
-                      );
-
-                      await user.reauthenticateWithCredential(credential);
-                      await user.updatePassword(newPassword);
-                      print('Password berhasil diubah');
-                      setState(() {
-                        isLoading = false;
-                        pesanKesalahan = 'Password berhasil diubah';
-                      });
-                      Navigator.pop(context);
-                    } else {
-                      setState(() {
-                        isLoading = false;
-                        pesanKesalahan = 'Pengguna tidak ditemukan';
-                      });
-                      print('Pengguna tidak ditemukan');
-                    }
-                  } catch (e) {
-                    setState(() {
-                      isLoading = false;
-                      pesanKesalahan =
-                          'Terjadi kesalahan saat mengubah password';
-                    });
-                    String errorMessage =
-                        'Terjadi kesalahan saat mengubah password';
-
-                    if (e is FirebaseAuthException) {
-                      if (e.code == 'wrong-password') {
-                        setState(() {
-                          isLoading = false;
-                          pesanKesalahan = 'Password saat ini salah';
-                        });
-                        errorMessage = 'Password saat ini salah';
-                      } else {
-                        setState(() {
-                          isLoading = false;
-                          pesanKesalahan = '${e.message}';
-                        });
-                        errorMessage = '${e.message}';
-                      }
-                    }
-                    setState(() {
-                      isLoading = false;
-                      pesanKesalahan = '$errorMessage';
-                    });
-                    print(errorMessage);
-                  }
-                },
-                child: const Text('Ubah'),
-              ),
+            Divider(
+              thickness: 1,
+              height: 5,
             ),
-            Container(
-              margin: const EdgeInsets.only(right: 15, bottom: 5),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context); // Tutup dialog
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.grey, // Warna latar belakang
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 5),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context)
+                            .primaryColor, // Warna latar belakang
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        try {
+                          User? user = FirebaseAuth.instance.currentUser;
+                          if (currentPassword.isEmpty ||
+                              newPassword.isEmpty ||
+                              confirmPassword.isEmpty) {
+                            setState(() {
+                              isLoading = false;
+                              pesanKesalahan =
+                                  'Semua field password harus diisi';
+                            });
+                            print('Semua field password harus diisi');
+                            return;
+                          }
+
+                          if (newPassword != confirmPassword) {
+                            setState(() {
+                              isLoading = false;
+                              pesanKesalahan =
+                                  'Konfirmasi password tidak cocok';
+                            });
+                            print('Konfirmasi password tidak cocok');
+                            return;
+                          }
+                          if (user != null) {
+                            AuthCredential credential =
+                                EmailAuthProvider.credential(
+                              email: user.email!,
+                              password: currentPassword,
+                            );
+
+                            await user.reauthenticateWithCredential(credential);
+                            await user.updatePassword(newPassword);
+                            print('Password berhasil diubah');
+                            setState(() {
+                              isLoading = false;
+                            });
+                            Navigator.pop(context);
+                          } else {
+                            setState(() {
+                              isLoading = false;
+                              pesanKesalahan = 'Pengguna tidak ditemukan';
+                            });
+                            print('Pengguna tidak ditemukan');
+                          }
+                        } catch (e) {
+                          setState(() {
+                            isLoading = false;
+                            pesanKesalahan =
+                                'Terjadi kesalahan saat mengubah password';
+                          });
+                          String errorMessage =
+                              'Terjadi kesalahan saat mengubah password';
+
+                          if (e is FirebaseAuthException) {
+                            if (e.code == 'wrong-password') {
+                              setState(() {
+                                isLoading = false;
+                                pesanKesalahan = 'Password saat ini salah';
+                              });
+                              errorMessage = 'Password saat ini salah';
+                            } else {
+                              setState(() {
+                                isLoading = false;
+                                pesanKesalahan = '${e.message}';
+                              });
+                              errorMessage = '${e.message}';
+                            }
+                          }
+                          setState(() {
+                            isLoading = false;
+                            pesanKesalahan = '$errorMessage';
+                          });
+                          print(errorMessage);
+                        }
+                      },
+                      child: const Text('Update'),
+                    ),
                   ),
                 ),
-                child: const Text('Batal'),
-              ),
+                const SizedBox(width: 10),
+                Expanded(
+                  // flex: 0,
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 5),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Tutup dialog
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.grey, // Warna latar belakang
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      child: const Text('Batal'),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         );
