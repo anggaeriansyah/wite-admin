@@ -21,7 +21,8 @@ Future<void> main() async {
   runApp(MyApp(authBloc: authBloc));
 }
 
-Color _colorPrime = HexColor("#1C6758");
+Color _colorPrime = HexColor("#007273");
+// Color _colorPrime = HexColor("#1C6758");
 Color _colorSec = HexColor("#FFFFFF");
 
 class MyApp extends StatelessWidget {
@@ -42,6 +43,13 @@ class MyApp extends StatelessWidget {
           textSelectionColor: Colors.grey.shade300,
           primaryColor: _colorPrime,
         ),
+        // theme: ThemeData(
+
+        //   // primarySwatch: Colors.blue,
+        //   accentColor: Colors.grey.shade600,
+        //   textSelectionColor: Colors.grey.shade300,
+        //   primaryColor: _colorPrime,
+        // ),
         home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
