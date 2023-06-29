@@ -2105,7 +2105,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                                       BorderRadius.all(Radius.circular(20))),
                               title: const Text('Perhatian!'),
                               content: const Text(
-                                'Apakah anda yakin ingin menyimpan wisata ini?',
+                                'Apakah anda yakin ingin menyimpan perubahan wisata ini?',
                                 style: TextStyle(fontSize: 16),
                               ),
                               actions: <Widget>[
@@ -2139,7 +2139,8 @@ class _UpdateScreenState extends State<UpdateScreen> {
                                           )),
                                       onPressed: () {
                                         updateDataToFirestore();
-                                        Get.to(const Dashboard());
+                                        // Get.to(const Dashboard());
+                                        Navigator.pop(context);
                                         print("Completed");
                                       },
                                     ),

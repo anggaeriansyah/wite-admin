@@ -21,8 +21,8 @@ Future<void> main() async {
   runApp(MyApp(authBloc: authBloc));
 }
 
-Color _colorPrime = HexColor("#007273");
-// Color _colorPrime = HexColor("#1C6758");
+// Color _colorPrime = HexColor("#007273");
+Color _colorPrime = HexColor("#1C6758");
 Color _colorSec = HexColor("#FFFFFF");
 
 class MyApp extends StatelessWidget {
