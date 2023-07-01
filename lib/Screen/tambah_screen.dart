@@ -1917,6 +1917,15 @@ class _TambahScreenState extends State<TambahScreen> {
                                       onPressed: () {
                                         saveDataToFirestore();
                                         Get.to(const Dashboard());
+                                        Get.snackbar(
+                                          'Sukses',
+                                          'Data berhasil disimpan',
+                                          backgroundColor:
+                                              Theme.of(context).primaryColor,
+                                          colorText: Colors.white,
+                                          duration: const Duration(seconds: 3),
+                                          snackPosition: SnackPosition.BOTTOM,
+                                        );
                                         print("Completed");
                                       },
                                     ),

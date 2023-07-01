@@ -2140,6 +2140,15 @@ class _UpdateScreenState extends State<UpdateScreen> {
                                       onPressed: () {
                                         updateDataToFirestore();
                                         // Get.to(const Dashboard());
+                                        Get.snackbar(
+                                          'Sukses',
+                                          'Data berhasil diubah',
+                                          backgroundColor:
+                                              Theme.of(context).primaryColor,
+                                          colorText: Colors.white,
+                                          duration: const Duration(seconds: 3),
+                                          snackPosition: SnackPosition.BOTTOM,
+                                        );
                                         Navigator.pop(context);
                                         print("Completed");
                                       },

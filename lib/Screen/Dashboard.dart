@@ -109,7 +109,7 @@ class _DashboardState extends State<Dashboard> {
               Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: PopupMenuButton(
-                    icon: Icon(
+                    icon: const Icon(
                       FontAwesomeIcons.userGear,
                       color: Colors.white,
                     ),
@@ -782,9 +782,14 @@ Future<void> _dialogBuilder(BuildContext context, data) {
                       style: TextStyle(color: Colors.white),
                     )),
                 onPressed: () {
-                  data.reference
-                      .delete()
-                      .then((value) => print("Delete berhasil"));
+                  data.reference.delete().then((value) => Get.snackbar(
+                        'Sukses',
+                        'Data berhasil dihapus',
+                        backgroundColor: Theme.of(context).primaryColor,
+                        colorText: Colors.white,
+                        duration: const Duration(seconds: 3),
+                        snackPosition: SnackPosition.BOTTOM,
+                      ));
                   Navigator.of(context).pop();
                 },
               ),
@@ -818,8 +823,8 @@ showChangePasswordDialog(BuildContext context) {
       return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
         return AlertDialog(
-          contentPadding: EdgeInsets.fromLTRB(24.0, 20, 24.0, 5),
-          actionsPadding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          contentPadding: const EdgeInsets.fromLTRB(24.0, 20, 24.0, 5),
+          actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
