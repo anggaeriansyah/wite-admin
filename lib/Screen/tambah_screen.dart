@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -1489,9 +1490,12 @@ class _TambahScreenState extends State<TambahScreen> {
                       }
                     },
                     child: Container(
-                      color: Theme.of(context).primaryColor,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
                       child: Row(
                         children: const [
                           Icon(
@@ -1977,6 +1981,23 @@ class _TambahScreenState extends State<TambahScreen> {
             type: StepperType.horizontal,
             steps: getSteps(),
             currentStep: currentStep,
+            controlsBuilder: (BuildContext context, ControlsDetails controls) {
+              return Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: controls.onStepContinue,
+                    child: Text(currentStep < getSteps().length - 1
+                        ? 'Selanjutnya'
+                        : 'Simpan'),
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: controls.onStepCancel,
+                    child: const Text('Kembali'),
+                  ),
+                ],
+              );
+            },
             onStepContinue: () {
               final isLastStep = currentStep == getSteps().length - 1;
               if (isLastStep) {
@@ -2100,7 +2121,31 @@ class _TambahScreenState extends State<TambahScreen> {
               }
             },
             onStepCancel: currentStep == 0
-                ? null
+                ? () {
+                    Get.defaultDialog(
+                      title: 'Konfirmasi',
+                      middleText: 'Apakah Anda yakin ingin keluar?',
+                      actions: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Theme.of(context).primaryColor),
+                          onPressed: () {
+                            Get.back();
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Ya'),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Theme.of(context).accentColor),
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: const Text('Tidak'),
+                        ),
+                      ],
+                    );
+                  }
                 : () {
                     setState(() {
                       currentStep -= 1;

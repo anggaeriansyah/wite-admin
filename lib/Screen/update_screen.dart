@@ -2207,6 +2207,23 @@ class _UpdateScreenState extends State<UpdateScreen> {
             type: StepperType.horizontal,
             steps: getSteps(),
             currentStep: currentStep,
+            controlsBuilder: (BuildContext context, ControlsDetails controls) {
+              return Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: controls.onStepContinue,
+                    child: Text(currentStep < getSteps().length - 1
+                        ? 'Selanjutnya'
+                        : 'Simpan'),
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: controls.onStepCancel,
+                    child: const Text('Kembali'),
+                  ),
+                ],
+              );
+            },
             onStepContinue: () {
               final isLastStep = currentStep == getSteps().length - 1;
               if (isLastStep) {
@@ -2329,7 +2346,31 @@ class _UpdateScreenState extends State<UpdateScreen> {
               }
             },
             onStepCancel: currentStep == 0
-                ? null
+                ? () {
+                    Get.defaultDialog(
+                      title: 'Konfirmasi',
+                      middleText: 'Apakah Anda yakin ingin keluar?',
+                      actions: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Theme.of(context).primaryColor),
+                          onPressed: () {
+                            Get.back();
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Ya'),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Theme.of(context).accentColor),
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: const Text('Tidak'),
+                        ),
+                      ],
+                    );
+                  }
                 : () {
                     setState(() {
                       currentStep -= 1;
