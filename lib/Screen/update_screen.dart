@@ -2162,23 +2162,19 @@ class _UpdateScreenState extends State<UpdateScreen> {
                           },
                         );
                       } else {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Data tidak lengkap'),
-                              content:
-                                  const Text('lengkapi data terlebih dahulu'),
-                              actions: [
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
+                        Get.defaultDialog(
+                          title: 'Data tidak lengkap',
+                          middleText: 'lengkapi data terlebih dahulu',
+                          actions: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).accentColor),
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: const Text('Ok'),
+                            ),
+                          ],
                         );
                       }
                     },
@@ -2321,22 +2317,19 @@ class _UpdateScreenState extends State<UpdateScreen> {
                     },
                   );
                 } else {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Data tidak lengkap'),
-                        content: const Text('lengkapi data terlebih dahulu'),
-                        actions: [
-                          TextButton(
-                            child: Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
+                  Get.defaultDialog(
+                    title: 'Data tidak lengkap',
+                    middleText: 'lengkapi data terlebih dahulu',
+                    actions: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).accentColor),
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text('Ok'),
+                      ),
+                    ],
                   );
                 }
               } else {

@@ -624,11 +624,13 @@ class _TambahScreenState extends State<TambahScreen> {
                           : Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Text('Upload',
-                                    style: TextStyle(color: Colors.blue)),
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor)),
                                 Text('Gambar',
-                                    style: TextStyle(color: Colors.blue)),
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor)),
                               ],
                             ),
                     ),
@@ -1936,23 +1938,19 @@ class _TambahScreenState extends State<TambahScreen> {
                           },
                         );
                       } else {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Data tidak lengkap'),
-                              content:
-                                  const Text('lengkapi data terlebih dahulu'),
-                              actions: [
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
+                        Get.defaultDialog(
+                          title: 'Data tidak lengkap',
+                          middleText: 'lengkapi data terlebih dahulu',
+                          actions: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).accentColor),
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: const Text('Ok'),
+                            ),
+                          ],
                         );
                       }
                     },
@@ -2096,22 +2094,19 @@ class _TambahScreenState extends State<TambahScreen> {
                     },
                   );
                 } else {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Data tidak lengkap'),
-                        content: const Text('lengkapi data terlebih dahulu'),
-                        actions: [
-                          TextButton(
-                            child: const Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
+                  Get.defaultDialog(
+                    title: 'Data tidak lengkap',
+                    middleText: 'lengkapi data terlebih dahulu',
+                    actions: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).accentColor),
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text('Ok'),
+                      ),
+                    ],
                   );
                 }
               } else {
