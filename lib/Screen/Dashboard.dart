@@ -693,6 +693,9 @@ class _DashboardState extends State<Dashboard> {
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .spaceBetween,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
                                                       children: [
                                                         InkWell(
                                                           onTap: () => Get.to(

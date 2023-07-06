@@ -15,7 +15,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _startTimer() {
     _timer?.cancel();
-    _timer = Timer(const Duration(minutes: 5), () {
+    _timer = Timer(const Duration(minutes: 10), () {
       add(const AuthTimeout());
     });
   }

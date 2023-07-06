@@ -1720,7 +1720,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                 ],
               ),
               const SizedBox(height: 5),
-              downloadUrls == null
+              downloadUrls!.isEmpty
                   ? const SizedBox()
                   : Container(
                       height: 100, // Atur tinggi sesuai kebutuhan

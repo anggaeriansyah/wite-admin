@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -165,41 +166,33 @@ Future<void> signInWithEmailAndPassword(
 }
 
 void showLoginErrorDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Login Gagal'),
-        content: const Text('Email atau password salah. Silakan coba lagi.'),
-        actions: [
-          TextButton(
-            child: const Text('Tutup'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
+  Get.defaultDialog(
+    title: 'Login Gagal',
+    middleText: 'Email atau password salah. Silakan coba lagi.',
+    actions: [
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: Theme.of(context).accentColor),
+        onPressed: () {
+          Get.back();
+        },
+        child: const Text('Ok'),
+      ),
+    ],
   );
 }
 
 void showLoginErrorNullDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Login Gagal'),
-        content: const Text('Email dan password harus diisi'),
-        actions: [
-          TextButton(
-            child: const Text('Tutup'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
+  Get.defaultDialog(
+    title: 'Login Gagal',
+    middleText: 'Email dan password harus diisi',
+    actions: [
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: Theme.of(context).accentColor),
+        onPressed: () {
+          Get.back();
+        },
+        child: const Text('Ok'),
+      ),
+    ],
   );
 }
